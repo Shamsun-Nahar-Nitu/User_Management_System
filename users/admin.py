@@ -10,11 +10,12 @@ class CustomUserAdmin(UserAdmin):
     list_display = ['username', 
                     'email', 
                     'full_name', 
-                    'designation', 
                     'address', 
+                    'designation', 
                     'organization', 
                     'mobile_number', 
-                    'working_language']
+                    'working_language', 
+                    'profile_picture']
     
     fieldsets = UserAdmin.fieldsets + (
         ('Custom Profile Info', {

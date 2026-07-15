@@ -3,8 +3,7 @@ from django.db import models
 
 class CustomUser(AbstractUser): 
     full_name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True, max_length=254) 
-    
+    email = models.EmailField(unique=True, max_length=254)    
     address = models.TextField(blank=True, null=True)
     designation = models.CharField(max_length=100, blank=True, null=True)
     organization = models.CharField(max_length=150, blank=True, null=True)
