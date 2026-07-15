@@ -1,19 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Home</title>
+    <title>Dashboard</title>
 </head>
 <body>
-    <h1>Homepage</h1>
     {% if user.is_authenticated %}
-        <p>Hi, {{ user.username }}! You are logged in.</p>
+        <h2>Welcome, {{ user.full_name|default:user.username }}!</h2>
+        
+        <!-- profile picture -->
+        {% if user.profile_picture %}
+            <img src="{{ user.profile_picture.url }}" alt="Profile Picture" style="width: 150px; border-radius: 50%;">
+        {% else %}
+            <p>No profile picture uploaded.</p>
+        {% endif %}
+        
+        <ul>
+            <li><strong>Email:</strong> {{ user.email }}</li>
+            <li><strong>Designation:</strong> {{ user.designation }}</li>
+            <li><strong>Organization:</strong> {{ user.organization }}</li>
+            <li><strong>Mobile Number:</strong> {{ user.mobile_number }}</li>
+            <li><strong>Address:</strong> {{ user.address }}</li>   
+            <li><strong>Language:</strong> {{ user.working_language }}</li>
+        </ul>
+
+        <!-- logout form -->
         <form action="{% url 'logout' %}" method="post">
             {% csrf_token %}
             <button type="submit">Log Out</button>
         </form>
+
     {% else %}
-        <p>You are not logged in.</p>
-        <a href="{% url 'login' %}">Log In Here</a>
+        <h2>You are not logged in</h2>
+        <a href="{% url 'login' %}">Log In</a> | 
+        <a href="{% url 'signup' %}">Sign Up</a>
     {% endif %}
 </body>
 </html>
