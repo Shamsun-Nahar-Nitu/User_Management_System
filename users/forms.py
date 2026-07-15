@@ -1,8 +1,9 @@
+from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import CustomUser
 
 class CustomSignUpForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
+    class Meta:
 
         model = CustomUser
         
