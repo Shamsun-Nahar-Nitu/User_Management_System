@@ -21,11 +21,28 @@ from django.conf import settings
 from django.conf.urls.static import static
 from users.views import SignUpView
 
+
+# --- DRF Router Imports ---
+from rest_framework.routers import DefaultRouter
+from users.api_views import UserViewSet
+
+# Automatically generate CRUD routes for users
+router = DefaultRouter()
+router.register(r'api/users', UserViewSet, basename='api-user')
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('django.contrib.auth.urls')), 
     path('signup/', SignUpView.as_view(), name='signup'),
     path('', TemplateView.as_view(template_name='home.html'), name='home'),
+    path('', include(router.urls)),
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 if settings.DEBUG:
