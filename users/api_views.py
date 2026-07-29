@@ -1,20 +1,23 @@
-from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework import generics, permissions
+from rest_framework.response import Response
 from .models import CustomUser
-from .serializers import UserSerializer
+from .serializers import UserSerializer, RegisterSerializer
 
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    A viewset that provides default `create()`, `retrieve()`, `update()`,
-    `partial_update()`, `destroy()` and `list()` actions.
-    """
+class RegisterAPIView(generics.CreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = RegisterSerializer
+    permission_classes = [permissions.AllowAny]
+
+
+class MeAPIView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+
+class UserListAPIView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
-
-    # Override permissions based on the action
-    def get_permissions(self):
-        if self.action == 'create':
-            # Allow anyone to create an account (Sign Up)
-            return [AllowAny()]
-        # Require a token for everything else (Read, Update, Delete)
-        return [IsAuthenticated()]
+    permission_classes = [permissions.IsAdminUser]
