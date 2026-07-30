@@ -1,4 +1,7 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import CustomUser
 from .serializers import UserSerializer, RegisterSerializer
 
@@ -24,3 +27,11 @@ class UserListAPIView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
+
+
+class LogoutAPIView(APIView):
+    """Blacklist the refresh token to log out."""
+    def post(self, request):
+        token = RefreshToken(request.data["refresh"])
+        token.blacklist()
+        return Response(status=status.HTTP_205_RESET_CONTENT)
