@@ -13,7 +13,7 @@ class RegisterAPIView(generics.CreateAPIView):
 class ProfileAPIView(generics.RetrieveUpdateAPIView):
     """Get or update the currently authenticated user."""
     serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
         return self.request.user
