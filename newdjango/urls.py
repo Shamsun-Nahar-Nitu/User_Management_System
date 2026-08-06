@@ -18,13 +18,13 @@ schema_view = get_schema_view(
         description="""
 User Management REST API with JWT Authentication.
 
-Authentication Flow:
-1. POST /api/register/
-2. POST /api/token/
-3. Authorization: ******
-4. POST /api/token/refresh/
-5. POST /api/logout/
-        """,
+Quick Authentication Flow:
+1. Register: POST /api/register/
+2. Login: POST /api/token/
+3. Authorize requests with: Bearer <access_token>
+4. Refresh tokens: POST /api/token/refresh/
+5. Logout: POST /api/logout/
+         """,
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
