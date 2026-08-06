@@ -2,6 +2,8 @@ from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import TokenError
+
 from .models import CustomUser
 from .serializers import UserSerializer, RegisterSerializer
 
@@ -23,15 +25,47 @@ class ProfileAPIView(generics.RetrieveUpdateAPIView):
 
 
 class UserListAPIView(generics.ListAPIView):
-    """Admin-only list of all users."""
-    queryset = CustomUser.objects.all()
+    """Admin-only paginated list of users."""
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAdminUser]
+    queryset = CustomUser.objects.only(
+        'id',
+        'username',
+        'email',
+        'full_name',
+        'address',
+        'designation',
+        'organization',
+        'mobile_number',
+        'working_language',
+        'profile_picture',
+    ).order_by('id')
 
 
 class LogoutAPIView(APIView):
     """Blacklist the refresh token to log out."""
+    permission_classes = [permissions.IsAuthenticated]
+
     def post(self, request):
-        token = RefreshToken(request.data["refresh"])
-        token.blacklist()
-        return Response(status=status.HTTP_205_RESET_CONTENT)
+        refresh_token = request.data.get("refresh")
+        if not refresh_token:
+            return Response(
+                {"detail": "Refresh token is required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            token = RefreshToken(refresh_token)
+            token_user_id = token.get("user_id")
+            if token_user_id != request.user.id:
+                return Response(
+                    {"detail": "Token does not belong to the authenticated user."},
+                    status=status.HTTP_403_FORBIDDEN
+                )
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except TokenError:
+            return Response(
+                {"detail": "Invalid or expired refresh token."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
