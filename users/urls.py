@@ -4,8 +4,7 @@ from .api_views import RegisterAPIView, ProfileAPIView, UserListAPIView, LogoutA
 from .views import HomeView, SignUpView
 
 urlpatterns = [
-    path('', HomeView.as_view(), name='home'),
-    path('signup/', SignUpView.as_view(), name='signup'),
+    
 
     path('auth/register/', RegisterAPIView.as_view(), name='api-register'),
     path('users/profile/', ProfileAPIView.as_view(), name='api-profile'),
