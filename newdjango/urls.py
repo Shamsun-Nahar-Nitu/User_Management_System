@@ -33,7 +33,7 @@ Quick Authentication Flow:
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('users.urls')),
+    path('api/', include('users.urls')),
 ]
 
 # Expose docs only in development

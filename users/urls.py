@@ -7,13 +7,11 @@ urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('signup/', SignUpView.as_view(), name='signup'),
 
-    path('api/register/', RegisterAPIView.as_view(), name='api-register'),
-    path('api/profile/', ProfileAPIView.as_view(), name='api-me'),
-    path('api/users/', UserListAPIView.as_view(), name='api-users'),
+    path('auth/register/', RegisterAPIView.as_view(), name='api-register'),
+    path('users/profile/', ProfileAPIView.as_view(), name='api-profile'),
+    path('users/details', UserListAPIView.as_view(), name='api-users'),
 
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/logout/', LogoutAPIView.as_view(), name='api-logout'),
-
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('auth/login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/logout/', LogoutAPIView.as_view(), name='api-logout'),
 ]
