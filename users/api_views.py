@@ -13,6 +13,8 @@ import logging
 from .models import CustomUser
 from .serializers import UserSerializer, RegisterSerializer, ChangePasswordSerializer
 from .permissions import IsOwnerOrAdmin
+from .serializers import AdminUserSerializer
+from rest_framework import viewsets
 
 logger = logging.getLogger('users')
 
@@ -136,3 +138,22 @@ class ChangePasswordAPIView(APIView):
 
         logger.info("User %s changed password.", user.username)
         return Response({'detail': 'Password changed successfully.'}, status=status.HTTP_200_OK)
+
+
+class AdminUserViewSet(viewsets.ModelViewSet):
+    """Admin-only user management (create/read/update/delete)."""
+    queryset = CustomUser.objects.all().order_by('id')
+    serializer_class = AdminUserSerializer
+    permission_classes = [permissions.IsAdminUser]
+
+    def perform_create(self, serializer):
+        user = serializer.save()
+        logger.info("Admin created user: %s (id=%s)", user.username, user.id)
+
+    def perform_update(self, serializer):
+        user = serializer.save()
+        logger.info("Admin updated user: %s (id=%s)", user.username, user.id)
+
+    def perform_destroy(self, instance):
+        logger.info("Admin deleted user: %s (id=%s)", instance.username, instance.id)
+        instance.delete()
