@@ -61,3 +61,16 @@ class RegisterSerializer(ProfilePictureValidationMixin, serializers.ModelSeriali
         user.set_password(password)
         user.save()
         return user
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True, min_length=8)
+    confirm_password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        if attrs.get('new_password') != attrs.get('confirm_password'):
+            raise serializers.ValidationError({
+                'confirm_password': 'New password and confirm password do not match.'
+            })
+        return attrs

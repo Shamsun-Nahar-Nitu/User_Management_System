@@ -5,6 +5,26 @@ from .models import CustomUser
 
 
 class CustomSignUpForm(UserCreationForm):
+    # Ensure password fields appear in the rendered form and in the desired order
+    field_order = (
+        'username',
+        'email',
+        'full_name',
+        'address',
+        'designation',
+        'organization',
+        'mobile_number',
+        'working_language',
+        'profile_picture',
+        'password1',
+        'password2',
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Provide friendlier labels for password fields
+        self.fields['password1'].label = 'Password'
+        self.fields['password2'].label = 'Confirm password'
     class Meta:
         model = CustomUser
         fields = (
