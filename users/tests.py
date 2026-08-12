@@ -10,14 +10,18 @@ class UsersApiTests(APITestCase):
         self.client = APIClient()
         # Create an admin user
         self.admin_user = User.objects.create_user(
-            username='admin', email='admin@example.com', password='adminpass123'
+            username='admin', 
+            email='admin@example.com', 
+            password='adminpass123'
         )
         self.admin_user.is_staff = True
         self.admin_user.save()
 
         # Create a regular user
         self.user = User.objects.create_user(
-            username='user1', email='user1@example.com', password='oldpass123'
+            username='user1', 
+            email='user1@example.com', 
+            password='oldpass123'
         )
 
     def obtain_tokens(self, username, password):
@@ -26,7 +30,9 @@ class UsersApiTests(APITestCase):
 
     def test_register_and_login(self):
         # Register a new user
-        data = {'username': 'newuser', 'email': 'newuser@example.com', 'password': 'newpass123'}
+        data = {'username': 'newuser', 
+                'email': 'newuser@example.com', 
+                'password': 'newpass123'}
         resp = self.client.post('/api/auth/register/', data, format='json')
         self.assertEqual(resp.status_code, 201)
 
