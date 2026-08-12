@@ -82,6 +82,4 @@ class UsersApiTests(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {admin_access}')
         resp2 = self.client.get('/api/users/details')
         self.assertEqual(resp2.status_code, 200)
-from django.test import TestCase
 
-# Create your tests here.
