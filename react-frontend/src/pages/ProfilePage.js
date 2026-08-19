@@ -1,14 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import api from '../services/api';
 
-export default function ProfilePage({ profile, profileForm, setProfileForm, handleProfileUpdate, handleLogout, loading, onBack }) {
+export default function ProfilePage() {
+  const { profile, loadProfile, logout } = useAuth();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
+
+  const [profileForm, setProfileForm] = useState({
+    full_name: profile?.full_name || '',
+    address: profile?.address || '',
+    designation: profile?.designation || '',
+    organization: profile?.organization || '',
+    mobile_number: profile?.mobile_number || '',
+    working_language: profile?.working_language || '',
+  });
+
+  const handleProfileUpdate = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    setMessage('');
+    setError('');
+    try {
+      await api.put('/users/profile/', profileForm);
+      await loadProfile();
+      setMessage('Profile updated successfully.');
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to update profile.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="card">
       <h2>Profile</h2>
       <div style={{ marginBottom: 12 }}>
-        <button type="button" onClick={onBack} className="secondary">
+        <button type="button" onClick={() => navigate('/profile')} className="secondary">
           ← Back
         </button>
       </div>
+      {message && <p className="success">{message}</p>}
+      {error && <p className="error">{error}</p>}
       {profile && (
         <p>
           Logged in as <strong>{profile.username}</strong> ({profile.email})
@@ -67,7 +103,7 @@ export default function ProfilePage({ profile, profileForm, setProfileForm, hand
           {loading ? 'Please wait...' : 'Update profile'}
         </button>
       </form>
-      <button type="button" className="secondary" onClick={handleLogout} disabled={loading}>
+      <button type="button" className="secondary" onClick={logout} disabled={loading}>
         Log out
       </button>
     </section>
