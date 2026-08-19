@@ -6,15 +6,6 @@
   color: #1f2937;
 }
 
-h1 {
-  margin-bottom: 6px;
-}
-
-.api-url {
-  color: #4b5563;
-  margin-top: 0;
-}
-
 .success {
   color: #166534;
   background: #dcfce7;
@@ -94,17 +85,55 @@ button {
   cursor: pointer;
 }
 
-button.secondary {
-  margin-top: 12px;
-  background: #475569;
-}
-
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.user-list {
-  margin-top: 12px;
-  padding-left: 18px;
+/* Recent Profile Chips */
+.recent-users-section {
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.recent-users-label {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.recent-users-list {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.recent-user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f3f4f6;
+  border: 1px solid #cbd5e1;
+  border-radius: 16px;
+  padding: 4px 10px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.recent-user-chip:hover {
+  background: #e2e8f0;
+}
+
+.recent-user-remove {
+  background: transparent;
+  color: #9ca3af;
+  font-size: 14px;
+  padding: 0;
+}
+
+.recent-user-remove:hover {
+  color: #ef4444;
 }
